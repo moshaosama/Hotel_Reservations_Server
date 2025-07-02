@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { HotelsService } from './hotels.service';
 
 @Controller('hotels')
@@ -8,5 +8,15 @@ export class HotelsController {
   @Get()
   findAllHotel() {
     return this.hotelsService.findAllHotel();
+  }
+
+  @Get('/cities')
+  findCities() {
+    return this.hotelsService.findCities();
+  }
+
+  @Get('/hotelName')
+  findHotelByCity(@Query('hotel_name') hotel_name: string) {
+    return this.hotelsService.findHotelByCity(hotel_name.trim());
   }
 }
