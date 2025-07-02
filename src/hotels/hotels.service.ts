@@ -14,4 +14,16 @@ export class HotelsService {
   findAllHotel() {
     return this.hotelRepository.find();
   }
+
+  findCities() {
+    return this.hotelRepository
+      .createQueryBuilder('hotel')
+      .select('hotel_name')
+      .distinct(true)
+      .getRawMany();
+  }
+
+  findHotelByCity(hotel_name: string) {
+    return this.hotelRepository.findBy({ hotel_name });
+  }
 }
