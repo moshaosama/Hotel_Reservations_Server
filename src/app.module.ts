@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HotelsModule } from './hotels/hotels.module';
 import { hotel } from './hotels/entities/hotel.entity';
+import { HistoryModule } from './history/history.module';
+import { history } from './history/entities/history.entity';
 
 @Module({
   imports: [
@@ -13,9 +15,10 @@ import { hotel } from './hotels/entities/hotel.entity';
       username: 'root',
       password: '',
       database: 'hotel_booking',
-      entities: [hotel],
+      entities: [hotel, history],
     }),
     HotelsModule,
+    HistoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
