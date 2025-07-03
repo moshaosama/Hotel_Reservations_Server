@@ -19,7 +19,11 @@ export class HistoryService {
   }
 
   getHistories() {
-    const data = this.hotelRepository.find();
+    const data = this.hotelRepository
+      .createQueryBuilder()
+      .select(['pathName', 'hotel_name', 'checkIn', 'checkOut'])
+      .distinct(true)
+      .getRawMany();
     return data;
   }
 }
