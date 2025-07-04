@@ -19,4 +19,9 @@ export class HotelsController {
   findHotelByCity(@Query('hotel_name') hotel_name: string) {
     return this.hotelsService.findHotelByCity(hotel_name.trim());
   }
+
+  @Get('/:hotel_id')
+  findHotelById(@Param('hotel_id') hotel_id: number) {
+    return this.hotelsService.findHotelById(hotel_id);
+  }
 }
