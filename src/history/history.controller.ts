@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { HistoryService } from './history.service';
 import { CreateHistoryDto } from './dto/create-history.dto';
 
@@ -14,5 +14,10 @@ export class HistoryController {
   @Get()
   getHistories() {
     return this.historyService.getHistories();
+  }
+
+  @Delete()
+  DeleteHistories() {
+    return this.historyService.DeleteHistories();
   }
 }
