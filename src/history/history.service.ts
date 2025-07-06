@@ -26,4 +26,8 @@ export class HistoryService {
       .getRawMany();
     return data;
   }
+
+  DeleteHistories() {
+    return this.hotelRepository.deleteAll();
+  }
 }
