@@ -6,16 +6,25 @@ import { HotelsModule } from './hotels/hotels.module';
 import { hotel } from './hotels/entities/hotel.entity';
 import { HistoryModule } from './history/history.module';
 import { history } from './history/entities/history.entity';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      username: 'root',
-      password: '',
-      database: 'hotel_booking',
-      entities: [hotel, history],
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'mysql',
+        host: config.get<string>('DB_HOST'),
+        port: config.get<number>('DB_PORT'),
+        username: config.get<string>('DB_USER'),
+        password: config.get<string>('DB_PASSWORD'),
+        database: config.get<string>('DB_DATABASE'),
+        entities: [hotel, history],
+      }),
     }),
     HotelsModule,
     HistoryModule,
