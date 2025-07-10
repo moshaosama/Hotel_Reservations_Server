@@ -37,7 +37,8 @@ export class HotelsService {
     return this.hotelRepository
       .createQueryBuilder('HotelById')
       .select()
-      .where( { id: hotel_id })
+      .where(
+         { id: hotel_id })
       .getOne();
   }
 }
