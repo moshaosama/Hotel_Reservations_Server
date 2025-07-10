@@ -7,6 +7,8 @@ import { hotel } from './hotels/entities/hotel.entity';
 import { HistoryModule } from './history/history.module';
 import { history } from './history/entities/history.entity';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { user } from './auth/entities/auth.entity';
 
 @Module({
   imports: [
@@ -19,10 +21,11 @@ import { ConfigModule } from '@nestjs/config';
       username: 'root',
       password: '',
       database: 'hotel_booking',
-      entities: [hotel, history],
+      entities: [hotel, history, user],
     }),
     HotelsModule,
     HistoryModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
