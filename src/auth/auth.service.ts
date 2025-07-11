@@ -4,6 +4,7 @@ import { user } from './entities/auth.entity';
 import { Repository } from 'typeorm';
 import { LoginDTO, SignUpDTO } from './dto/create-auth.dto';
 import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -27,9 +28,32 @@ export class AuthService {
     return this.userRepository.save(newUser);
   }
 
-  Login(user: LoginDTO) {
+  async Login(user: LoginDTO) {
     if (!user) {
       throw new NotFoundException('Data is required');
     }
+
+    const findUser = await this.userRepository.findOne({
+      where: { Email: user.Email },
+    });
+
+    if (!findUser) {
+      throw new NotFoundException('Not found user by this email');
+    }
+
+    if (!(await bcrypt.compare(user.Password, findUser.Password))) {
+      throw new NotFoundException('Password is not correct');
+    }
+
+    const token = jwt.sign(
+      { id: findUser.id, Email: findUser.Email },
+      process.env.JWT_SECRET || 'my-secret-key',
+      { expiresIn: '1h' },
+    );
+
+    return {
+      findUser,
+      token,
+    };
   }
 }
