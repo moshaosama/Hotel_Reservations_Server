@@ -18,4 +18,9 @@ export class AuthController {
   SignUp(@Body() user: SignUpDTO) {
     return this.authService.SignUp(user);
   }
+
+  @Post('login')
+  Login(@Body() user: SignUpDTO) {
+    return this.authService.Login(user);
+  }
 }
