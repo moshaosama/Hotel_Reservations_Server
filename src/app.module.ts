@@ -27,6 +27,7 @@ import { user } from './auth/entities/auth.entity';
         password: config.get<string>('DB_PASSWORD'),
         database: config.get<string>('DB_DATABASE'),
         entities: [hotel, history, user],
+        synchronize: true,
       }),
     }),
     HotelsModule,
