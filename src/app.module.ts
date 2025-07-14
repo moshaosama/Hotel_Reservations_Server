@@ -2,11 +2,12 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
 import { HotelsModule } from './hotels/hotels.module';
 import { hotel } from './hotels/entities/hotel.entity';
 import { HistoryModule } from './history/history.module';
 import { history } from './history/entities/history.entity';
-import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { user } from './auth/entities/auth.entity';
 
@@ -15,15 +16,18 @@ import { user } from './auth/entities/auth.entity';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: process.env.DB_HOST || 'localhost',
-      port: parseInt(process.env.DB_PORT || '3306', 10),
-      username: process.env.DB_USER || 'root',
-      password: process.env.DB_PASSWORD || '',
-      database: process.env.DB_DATABASE || 'hotel_booking',
-      entities: [hotel, history, user],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        type: 'mysql',
+        host: config.get<string>('DB_HOST'),
+        port: parseInt(config.get<string>('DB_PORT') || '3306', 10),
+        username: config.get<string>('DB_USER'),
+        password: config.get<string>('DB_PASSWORD'),
+        database: config.get<string>('DB_DATABASE'),
+        entities: [hotel, history, user],
+      }),
     }),
     HotelsModule,
     HistoryModule,
@@ -32,4 +36,8 @@ import { user } from './auth/entities/auth.entity';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    console.log('✅ Database config loaded from .env');
+  }
+}
